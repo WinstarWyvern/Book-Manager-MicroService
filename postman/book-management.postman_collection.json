@@ -1,0 +1,55 @@
+{
+  "info": {
+    "name": "Book Management Microservice",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "bookId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Add a new book",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/books",
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Clean Code\",\n  \"author\": \"Robert C. Martin\",\n  \"isbn\": \"9780132350884\",\n  \"publishedDate\": \"2008-08-01\"\n}" }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('201 Created', () => pm.response.to.have.status(201));",
+        "pm.collectionVariables.set('bookId', pm.response.json().id);"
+      ] } }]
+    },
+    {
+      "name": "Get all books",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/books" }
+    },
+    {
+      "name": "Get book by ID",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/books/{{bookId}}" }
+    },
+    {
+      "name": "Update book (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/books/{{bookId}}",
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Clean Code (Updated)\",\n  \"author\": \"Robert C. Martin\",\n  \"isbn\": \"9780132350884\",\n  \"publishedDate\": \"2008-08-01\"\n}" }
+      }
+    },
+    {
+      "name": "Partial update (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/books/{{bookId}}",
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Clean Code: A Handbook of Agile Software Craftsmanship\"\n}" }
+      }
+    },
+    {
+      "name": "Delete book",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/books/{{bookId}}" }
+    }
+  ]
+}
